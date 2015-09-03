@@ -1,0 +1,12 @@
+
+body{
+    background-color:white;
+}
+#home, #refresh{
+    font-size: 75%;
+    display:inline;
+    margin: 0 10px;
+    color: #2D6F9C;
+    cursor: pointer;
+    text-decoration: underline;
+}

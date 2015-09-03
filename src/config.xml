@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="web-browser" version="1.5.2">
+  <details>
+    <title>Web Browser</title>
+    <email>wirecloud@conwet.com</email>
+    <image>images/catalogue.png</image>
+    <smartphoneimage>images/catalogue.png</smartphoneimage>
+    <description>Display external web pages in your dashboards</description>
+    <homepage>https://github.com/Wirecloud/browser-widget</homepage>
+    <issuetracker>https://github.com/Wirecloud/browser-widget/issues</issuetracker>
+    <doc>docs/index.html</doc>
+    <authors>Santiago Blanco &lt;sblanco@conwet.com&gt;</authors>
+  </details>
+  <preferences>
+    <preference name="httpVerb" type="list" label="HTTP verb" description="HTTP verb" default="GET">
+      <option label="GET" value="GET"/>
+      <option label="POST" value="POST"/>
+    </preference>
+    <preference name="homeUrl" type="text" label="Home page URL" description="Home page URL" default="http://www.as.com"/>
+    <preference name="refreshingTime" type="text" label="Autorefresh period (minutes)" description="Refreshing interval in minutes. You can use 0 for making this widget not autorefresh web pages." default="0"/>
+    <preference name="useProxy" type="boolean" label="Use Proxy" description="Use WireCloud proxy to retreive web pages" default="false"/>
+  </preferences>
+  <persistentvariables>
+    <variable name="source" type="text" label="source"/>
+    <variable name="sourceUrl" type="text" label="source URL"/>
+  </persistentvariables>
+  <wiring>
+    <inputendpoint name="urlInput" type="text" label="URL" description="This url will be loaded" actionlabel="Url" friendcode="url"/>
+    <inputendpoint name="paramsInput" type="text" label="Paremeters" description="Url parameters" actionlabel="Parameters" friendcode="parameters"/>
+  </wiring>
+  <contents src="index.html" cacheable="false" useplatformstyle="true"/>
+  <rendering height="26" width="10"/>
+</widget>
