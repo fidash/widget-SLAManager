@@ -1,10 +1,10 @@
-/*global WebBrowser*/
+/*global SLAManager*/
 
 (function () {
 
     "use strict";
 
-    var webBrowser = new WebBrowser();
-    window.addEventListener("DOMContentLoaded", webBrowser.init.bind(webBrowser), false);
+    var slaManager = new SLAManager();
+    window.addEventListener("DOMContentLoaded", slaManager.init.bind(slaManager), false);
 
 })();

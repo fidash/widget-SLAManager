@@ -1,7 +1,7 @@
 {
     "browser": true,
     "debug": false,
-    "devel": false,
+    "devel": true,
     "eqnull": true,
     "forin": false,
     "undef": true,
