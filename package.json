@@ -1,11 +1,11 @@
 {
   "vendor": "CoNWeT",
-  "name": "web-browser-widget",
-  "version": "1.5.2",
-  "description": "A simple widget for displaying external web pages",
+  "name": "SLAManager-widget",
+  "version": "0.1",
+  "description": "FIDASH widget to manage Service Level Agreements.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wirecloud/web-browser-widget.git"
+    "url": "https://github.com/fidash/widget-SLAManager.git"
   },
   "keywords": [
     "wirecloud"

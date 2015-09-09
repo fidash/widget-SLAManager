@@ -72,17 +72,17 @@
             onSuccess: onSuccess,
             onFailure: onFailure
         });
-    }
+    };
 
     var getAgreements = function getAgreements() {
 
         makeRequest.call(this, "agreements", "GET",
-            onSuccess: function (response) {
+            function (response) {
                 setAgreements.call(this, JSON.parse(response.response));
-                getTemplates.call();
+                getTemplates.call(this);
             }.bind(this),
 
-            onFailure: function () {
+            function () {
                 console.log("Error retrieving the agreements data");
             }
         );
@@ -91,27 +91,56 @@
     var getTemplates = function getTemplates() {
 
         makeRequest.call(this, "templates", "GET",
-            onSuccess: function (response) {
-                this.templatesData = JSON.parse(response.response);
-                displayData.call(this, agreementsData);
+            function (response) {
+                setTemplates.call(this, JSON.parse(response.response));
+                displayData.call(this, this.agreementsData);
             }.bind(this),
-            onFailure: function () {
+            function () {
                 console.log("Error retrieving the templates data");
             }
         );
-    }
+    };
 
-    var setAgreements = function setAgreements(response){
+    /*  agreementId: "87726a36-e570-4482-b3cc-1cb3d8998bb8"
+        context: Object
+            agreementInitiator: "user1@serviceuser.com"
+            agreementResponder: "Provider1"
+            expirationTime: "0024-03-07T11:08:24CET"
+            service: "Service1"
+            serviceProvider: "AgreementResponder"
+            templateId: "e7efbfc1-3039-44c1-82d5-3d0e04cf2368"
+    */
+
+    var setAgreements = function setAgreements(response) {
         this.agreementsData = {};
 
-        for (var i in response){
-            this.agreementsData[response[i]['id']] = {
-                context: response[i]['context'],
-                name: response[i]['name'],
-                terms: response[i]['terms']
+        for (var i in response) {
+            this.agreementsData[response[i].agreementId] = {
+                context: response[i].context,
+                name: response[i].name,
+                terms: response[i].terms
             };
         }
-    }
+    };
+
+    /*
+        context: Object
+            agreementInitiator: "Provider1"
+            agreementResponder: null
+            expirationTime: "0037-01-04T15:08:15CET"
+            service: "Service1"
+            serviceProvider: "AgreementInitiator"
+            templateId: null
+        name: "Template1"
+        templateId: "casdasd
+    */
+    var setTemplates = function setTemplates(response) {
+        this.templatesData = {};
+
+        for (var i in response) {
+            this.templatesData[response[i].templateId] = response[i].name; //The only thing we need is the names
+        }
+    };
 
     var displayData = function displayData(data) {
         //TODO How to update data???
@@ -131,12 +160,12 @@
             //Apparently we need to get the status separately, does not make much sense....
             row.push("Fullfiled"); //?? STATUS
             row.push("Actions"); //Not sure what goes in here
-            row.push(data[i]['name']);//Agreement name
-            row.push(data[i]['template']);//Template Name
-            row.push(data[i]['name']);//Provider
-            row.push(data[i]['name']);//Service
+            row.push(data[i].name);//Agreement name
+            row.push(this.templatesData[data[i].context.templateId]);//Template Name
+            row.push(data[i].context.serviceProvider);//Provider
+            row.push(data[i].context.Service);//Service
 
-            transformedData.push(row);
+            transformedData.push(row);*/
         }
 
         return transformedData;
