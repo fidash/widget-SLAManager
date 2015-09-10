@@ -28,6 +28,7 @@
         this.agreementsData = null;
         this.templatesData = null;
         this.agreementsTable = document.getElementById("agreements_table");
+        this.incompleted = 0;
     };
 
     SLAManager.prototype.init = function init() {
@@ -39,7 +40,7 @@
         //setResizeWidget.call(this);
         // User Interface:
         //buildDOM.call(this);
-        getAgreements.call(this);
+        requestAgreements.call(this);
     };
 
     /******************************************************************************/
@@ -74,12 +75,12 @@
         });
     };
 
-    var getAgreements = function getAgreements() {
+    var requestAgreements = function requestAgreements() {
 
         makeRequest.call(this, "agreements", "GET",
             function (response) {
                 setAgreements.call(this, JSON.parse(response.response));
-                getTemplates.call(this);
+                requestTemplates.call(this);
             }.bind(this),
 
             function () {
@@ -88,17 +89,51 @@
         );
     };
 
-    var getTemplates = function getTemplates() {
+
+
+    var requestTemplates = function requestTemplates() {
 
         makeRequest.call(this, "templates", "GET",
             function (response) {
                 setTemplates.call(this, JSON.parse(response.response));
-                displayData.call(this, this.agreementsData);
+                requestStatus.call(this);
             }.bind(this),
             function () {
                 console.log("Error retrieving the templates data");
             }
         );
+    };
+
+    var requestStatus = function requestStatus() {
+
+        var onSuccess = function (response) {
+            var id = response.request.url.split("/")[7];
+            var resp = JSON.parse(response.response);
+            this.agreementsData[id].status = {
+                guranteestatus: resp.guaranteestatus,
+                guaranteeterms: resp.guaranteeterms
+            };
+
+            this.incompleted--;
+
+            if (!this.incompleted) {
+                displayData.call(this, this.agreementsData);
+            }
+        }.bind(this);
+
+        var onFailure = function (response) {
+            this.agreementsData[id].status = "-";
+            console.log("Error retrieving the status data");
+            this.incompleted--;
+
+            if (!this.incompleted) {
+                displayData.call(this, this.agreementsData);
+            }
+        }.bind(this);
+
+        for (var id in this.agreementsData) {
+            makeRequest.call(this, "agreements/" + id + "/guaranteestatus", "GET", onSuccess, onFailure);
+        }
     };
 
     /*  agreementId: "87726a36-e570-4482-b3cc-1cb3d8998bb8"
@@ -113,6 +148,7 @@
 
     var setAgreements = function setAgreements(response) {
         this.agreementsData = {};
+        this.incompleted = response.length;
 
         for (var i in response) {
             this.agreementsData[response[i].agreementId] = {
@@ -165,7 +201,7 @@
             row.push(data[i].context.serviceProvider);//Provider
             row.push(data[i].context.Service);//Service
 
-            transformedData.push(row);*/
+            transformedData.push(row);
         }
 
         return transformedData;
