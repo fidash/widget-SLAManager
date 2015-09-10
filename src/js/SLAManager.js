@@ -110,7 +110,7 @@
             var id = response.request.url.split("/")[7];
             var resp = JSON.parse(response.response);
             this.agreementsData[id].status = {
-                guranteestatus: resp.guaranteestatus,
+                guaranteestatus: resp.guaranteestatus,
                 guaranteeterms: resp.guaranteeterms
             };
 
@@ -189,17 +189,16 @@
     };
     /*Status    Actions Agreement Name  Template Name   Provider    Service    */
     var transformData = function transformData(data) {
-
         var transformedData = [];
         for (var i in data) {
             var row = [];
             //Apparently we need to get the status separately, does not make much sense....
-            row.push("Fullfiled"); //?? STATUS
+            row.push(data[i].status.guaranteestatus); //Status
             row.push("Actions"); //Not sure what goes in here
             row.push(data[i].name);//Agreement name
             row.push(this.templatesData[data[i].context.templateId]);//Template Name
             row.push(data[i].context.serviceProvider);//Provider
-            row.push(data[i].context.Service);//Service
+            row.push(data[i].context.service);//Service
 
             transformedData.push(row);
         }
