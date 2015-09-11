@@ -6,6 +6,7 @@
     "forin": false,
     "undef": true,
     "unused": "vars",
+    "jquery": "true",
     "prototypejs": false,
     "globalstrict": false,
     "strict": true,

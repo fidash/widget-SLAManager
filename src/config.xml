@@ -20,6 +20,6 @@
   </persistentvariables>
   <wiring>
   </wiring>
-  <contents src="index.html" cacheable="false" useplatformstyle="true"/>
+  <contents src="index.html" useplatformstyle="true"/>
   <rendering height="26" width="10"/>
 </widget>

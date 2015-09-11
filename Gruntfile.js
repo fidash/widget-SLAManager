@@ -26,7 +26,14 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
-                    {expand: true, cwd: 'src/js', src: '*', dest: 'build/src/js'}
+                    {expand: true, cwd: 'src/js', src: '*', dest: 'build/src/js'},
+                    {expand: true, src: ['**/*', '!test/**'], dest: 'build/wgt', cwd: 'src'},
+                    {expand: true, src: ['jquery.min.map', 'jquery.min.js'], dest: 'build/wgt/lib/js', cwd: 'node_modules/jquery/dist'},
+                    {expand: true, src: ['bootstrap.min.css', 'bootstrap.css.map', 'bootstrap-theme.min.css', 'bootstrap-theme.css.map'], dest: 'build/wgt/lib/css', cwd: 'node_modules/bootstrap/dist/css'},
+                    {expand: true, src: ['bootstrap.min.js'], dest: 'build/wgt/lib/js', cwd: 'node_modules/bootstrap/dist/js'},
+                    {expand: true, src: ['*'], dest: 'build/wgt/lib/fonts', cwd: 'node_modules/bootstrap/dist/fonts'},
+                    {expand: true, src: ['css/jquery.dataTables.min.css', 'js/jquery.dataTables.min.js', 'images/*'], dest: 'build/wgt/lib', cwd: 'node_modules/datatables/media'},
+                    {expand: true, src: ['css/font-awesome.min.css', 'fonts/*'], dest: 'build/wgt/lib', cwd: 'node_modules/font-awesome'}
                 ]
             }
         },
@@ -44,42 +51,10 @@ module.exports = function (grunt) {
                     archive: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt'
                 },
                 files: [
-                    {
-                        expand: true,
-                        cwd: 'src',
-                        src: [
-                            'css/**/*',
-                            'docs/**/*',
-                            'images/**/*',
-                            'index.html',
-                            'config.xml'
-                        ]
-                    },
-                    {
-                        expand: true,
-                        cwd: 'build/lib',
-                        src: [
-                            'lib/**/*'
-                        ]
-                    },
-                    {
-                        expand: true,
-                        cwd: 'build/src',
-                        src: [
-                            'js/**/*'
-                        ]
-                    },
-                    {
-                        expand: true,
-                        cwd: '.',
-                        src: [
-                            'LICENSE'
-                        ]
-                    }
+                    {expand: true, src: ['**/*'], cwd: 'build/wgt'}
                 ]
             }
         },
-
         clean: {
             build: {
                 src: ['build']

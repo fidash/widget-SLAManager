@@ -7,6 +7,11 @@
 
         <!-- CSS -->
         <link type="text/css" rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" type="text/css" href="lib/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="lib/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="lib/css/dataTables.fixedHeader.css">
+        <link rel="stylesheet" type="text/css" href="lib/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
 
         <!-- JS -->
         <script type="text/javascript" src="js/SLAManager.js"></script>
@@ -17,27 +22,6 @@
         <script src="lib/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <div id="leftpanel">
-            <div class="span3">
-            <h3 style="color: #0088cc;">
-                Agreement status
-            </h3>
-            <div id="filter">
-                <div class="control-group">
-                    <label for="id_status" class="control-label">Status:</label>
-                    <div class="controls">
-                        <select class="form-control" id="id_status" name="status">
-                            <option value="" selected="selected">All</option>
-                            <option value="FULFILLED">Fulfilled</option>
-                            <option value="VIOLATED">Violated</option>
-                            <option value="NON_DETERMINED">Non determined</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="rightpanel">
-            <table id="agreements_table" class="display" cellpadding="0" border="0" cellspacing="0" width="100%"></table>
-        </div>
+        <table id="agreements_table" class="display" cellpadding="0" border="0" cellspacing="0" width="100%"></table>
     </body>
 </html>
