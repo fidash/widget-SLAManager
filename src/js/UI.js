@@ -1,3 +1,4 @@
+var Global1 = "TEST";
 var UI = (function () {
     "use strict";
     var dataTable;
@@ -29,6 +30,7 @@ var UI = (function () {
                 }
             }
         });
+        createSearchField($('#agreements_table_paginate'));
 
     };
 
@@ -56,5 +58,9 @@ var UI = (function () {
         searchInput.on('keyup', function () {
             dataTable.api().search(this.value).draw();
         });
+    };
+
+    return {
+        displayData: displayData
     };
 })();

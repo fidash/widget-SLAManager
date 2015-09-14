@@ -136,8 +136,8 @@
         }
     };
 
-    var displayData = function transformData(data) {
-        var newData = this.transformData.call(data);
+    var displayData = function displayData(data) {
+        var newData = transformData.call(this, data);
         UI.displayData(newData);
     };
 
