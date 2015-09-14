@@ -5,7 +5,7 @@
     "eqnull": true,
     "forin": false,
     "undef": true,
-    "unused": "vars",
+    "unused": "true",
     "jquery": "true",
     "prototypejs": false,
     "globalstrict": false,
@@ -15,6 +15,7 @@
     "globals": {
         "URL": false,
         "MashupPlatform": true,
-        "StyledElements": true
+        "StyledElements": true,
+        "UI": true
     }
 }

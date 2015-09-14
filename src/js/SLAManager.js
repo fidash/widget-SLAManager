@@ -27,7 +27,6 @@
         this.statusSelect = null;
         this.agreementsData = null;
         this.templatesData = null;
-        this.agreementsTable = document.getElementById("agreements_table");
         this.incompleted = 0;
         this.datatable = {};
     };
@@ -137,6 +136,37 @@
         }
     };
 
+    var displayData = function transformData(data) {
+        var newData = this.transformData.call(data);
+        UI.displayData(newData);
+    };
+
+    /*Status    Actions Agreement Name  Template Name   Provider    Service    */
+    var transformData = function transformData(data) {
+        var transformedData = [];
+        for (var i in data) {
+            var row = [];
+            //Apparently we need to get the status separately, does not make much sense....
+            row.push(data[i].status.guaranteestatus); //Status
+            row.push("Actions"); //Not sure what goes in here
+            row.push(data[i].name);//Agreement name
+
+            //Real code
+            //row.push(this.templatesData[data[i].context.templateId]);//Template Name
+
+            //Code for displaying something with the mocked data, since the only
+            //existing template is not the one being used by the agreements.
+            row.push(this.templatesData[Object.keys(this.templatesData)[0]]);
+
+            row.push(data[i].context.serviceProvider);//Provider
+            row.push(data[i].context.service);//Service
+
+            transformedData.push(row);
+        }
+
+        return transformedData;
+    };
+
     /*  agreementId: "87726a36-e570-4482-b3cc-1cb3d8998bb8"
         context: Object
             agreementInitiator: "user1@serviceuser.com"
@@ -178,69 +208,6 @@
             this.templatesData[response[i].templateId] = response[i].name; //The only thing we need is the names
         }
     };
-
-    var displayData = function displayData(data) {
-        //TODO How to update data???
-        //this.agreementsTable.innerHTML = "";
-        console.log("Display data:");
-
-        var tableData = transformData.call(this, data);
-        console.log(tableData);
-
-        var columns = [
-            {'title': 'Status'},
-            {'title': 'Actions'},
-            {'title': 'Agreement Name'},
-            {'title': 'Template Name'},
-            {'title': 'Provider'},
-            {'title': 'Service'}
-        ];
-
-        this.datatable = $('#agreements_table').dataTable({
-            'columns': columns,
-            'data': tableData,
-            'dom': 't<"navbar navbar-default navbar-fixed-bottom"p>',
-            'binfo': false,
-            'pagingType': 'full_numbers',
-            'info': false,
-            "language": {
-                "paginate": {
-                    "first": '<i class="fa fa-fast-backward"></i>',
-                    "last": '<i class="fa fa-fast-forward"></i>',
-                    "next": '<i class="fa fa-forward"></i>',
-                    "previous": '<i class="fa fa-backward"></i>'
-                }
-            }
-        });
-
-    };
-    /*Status    Actions Agreement Name  Template Name   Provider    Service    */
-    var transformData = function transformData(data) {
-        var transformedData = [];
-        for (var i in data) {
-            var row = [];
-            //Apparently we need to get the status separately, does not make much sense....
-            row.push(data[i].status.guaranteestatus); //Status
-            row.push("Actions"); //Not sure what goes in here
-            row.push(data[i].name);//Agreement name
-
-            //Real code
-            //row.push(this.templatesData[data[i].context.templateId]);//Template Name
-
-            //Code for displaying something with the mocked data, since the only
-            //existing template is not the one being used by the agreements.
-            row.push(this.templatesData[Object.keys(this.templatesData)[0]]);
-
-            row.push(data[i].context.serviceProvider);//Provider
-            row.push(data[i].context.service);//Service
-
-            transformedData.push(row);
-        }
-
-        return transformedData;
-    };
-
-
 
     /******************************** HANDLERS ************************************/
 
