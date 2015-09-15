@@ -12,16 +12,16 @@
     <authors>Borja Illescas &lt;billescas@conwet.com&gt;</authors>
   </details>
   <preferences>
-    <preference name="server_url" type="text" label="SLA Manager URL" description="URL of the SLA Manager server." default="http://private-anon-8ac6bf75f-slamanagercore.apiary-mock.com"/>
+    <preference name="serverUrl" type="text" label="SLA Manager URL" description="URL of the SLA Manager server." default="http://private-anon-8ac6bf75f-slamanagercore.apiary-mock.com"/>
     <preference name="user" type="text" label="User" description="User for authenticating with the SLA Manager." default="user"/>
     <preference name="password" type="password" label="Password" description="Password for authenticating with the SLA Manager." default="SysT3m4T0sSL4Us3r"/>
-    <preference name="status_filter" type="list" label="Status" description="Filter by status" default="default">
+    <preference name="statusFilter" type="list" label="Status" description="Filter by status" default="default">
       <option value="all" label="All"/>
       <option value="fullfiled" label="Fullfiled"/>
-      <option value="violated" label="violated"/>
+      <option value="violated" label="Violated"/>
       <option value="nondetermined" label="Non determined"/>
     </preference>
-    <preference name="provider_filter" type="text" label="Provider" description="Filter by provider name." default=""/>   
+    <preference name="providerFilter" type="text" label="Provider" description="Filter by provider name." default=""/>   
   </preferences>
   <persistentvariables>
   </persistentvariables>

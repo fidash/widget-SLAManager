@@ -1,38 +1,43 @@
 var Global1 = "TEST";
 var UI = (function () {
     "use strict";
-    var dataTable;
+    var dataTable = null;    
 
     var displayData = function displayData(data) {
 
-        var columns = [
-            {'title': 'Status'},
-            {'title': 'Actions'},
-            {'title': 'Agreement Name'},
-            {'title': 'Template Name'},
-            {'title': 'Provider'},
-            {'title': 'Service'}
-        ];
+        if (!dataTable) {//this means the table has not been created yet
 
-        dataTable = $('#agreements_table').dataTable({
-            'columns': columns,
-            'data': data,
-            'dom': 't<"navbar navbar-default navbar-fixed-bottom"p>',
-            'binfo': false,
-            'pagingType': 'full_numbers',
-            'info': false,
-            "language": {
-                "paginate": {
-                    "first": '<i class="fa fa-fast-backward"></i>',
-                    "last": '<i class="fa fa-fast-forward"></i>',
-                    "next": '<i class="fa fa-forward"></i>',
-                    "previous": '<i class="fa fa-backward"></i>'
+            var columns = [
+                {'title': 'Status'},
+                {'title': 'Actions'},
+                {'title': 'Agreement Name'},
+                {'title': 'Template Name'},
+                {'title': 'Provider'},
+                {'title': 'Service'}
+            ];
+
+            dataTable = $('#agreements_table').dataTable({
+                'columns': columns,
+                'data': data,
+                'dom': 't<"navbar navbar-default navbar-fixed-bottom"p>',
+                'binfo': false,
+                'pagingType': 'full_numbers',
+                'info': false,
+                "language": {
+                    "paginate": {
+                        "first": '<i class="fa fa-fast-backward"></i>',
+                        "last": '<i class="fa fa-fast-forward"></i>',
+                        "next": '<i class="fa fa-forward"></i>',
+                        "previous": '<i class="fa fa-backward"></i>'
+                    }
                 }
-            }
-        });
-        createModalButton($('#agreements_table_paginate'));
-        createSearchField($('#agreements_table_paginate'));
-
+            });
+            createModalButton($('#agreements_table_paginate'));
+            createSearchField($('#agreements_table_paginate'));
+        }else{// the table exists, so we need to refresh the data
+            dataTable.api().clear(); //we clear the data
+            dataTable.api().row.add(data);
+        }
     };
 
     var createModalButton = function createModalButton (nextElement) {

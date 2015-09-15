@@ -33,9 +33,8 @@
 
     SLAManager.prototype.init = function init() {
         // Preferences:
-        //setPreferences.call(this);
-        // Wiring:
-        //setWiringInputs.call(this);
+        setPreferences.call(this);
+
         // Context:
         //setResizeWidget.call(this);
         requestAgreements.call(this);
@@ -45,8 +44,17 @@
     /******************************** PRIVATE *************************************/
     /******************************************************************************/
 
+    var setPreferences = function setPreferences() {
+        this.serverUrl = MashupPlatform.prefs.get("serverUrl");
+        this.user = MashupPlatform.prefs.get("user");
+        this.password = MashupPlatform.prefs.get("password");
+        this.statusFilter = MashupPlatform.prefs.get("statusFilter");
+        this.providerFilter = MashupPlatform.prefs.get("providerFilter");
+        MashupPlatform.prefs.registerCallback(handlerPreferences.bind(this));
+    };
+
     var makeRequest = function makeRequest(url, method, onSuccess, onFailure) {
-        var baseURL = MashupPlatform.prefs.get("server_url");
+        var baseURL = this.serverUrl;
         if (baseURL[baseURL.length - 1] !== "/") {
             baseURL += "/";
         }
@@ -55,8 +63,8 @@
         MashupPlatform.http.makeRequest(baseURL, {
             method: method,
             requestHeaders: {
-                user: MashupPlatform.prefs.get("user"),
-                password: MashupPlatform.prefs.get("password"),
+                user: this.user,
+                password: this.password,
                 Accept: "application/json"
             },
             onSuccess: onSuccess,
@@ -134,23 +142,27 @@
     var transformData = function transformData(data) {
         var transformedData = [];
         for (var i in data) {
-            var row = [];
-            //Apparently we need to get the status separately, does not make much sense....
-            row.push(data[i].status.guaranteestatus); //Status
-            row.push("Actions"); //Not sure what goes in here
-            row.push(data[i].name);//Agreement name
+            var status = data[i].status.guaranteestatus;
+            if (status.toLowerCase() == this.statusFilter
+                /*&& data[i].context.serviceProvider*/) {//TODO add providerFilter
+                var row = [];
+                //Apparently we need to get the status separately, does not make much sense....
+                row.push(status); //Status
+                row.push("Actions"); //TODO: Add delete
+                row.push(data[i].name);//Agreement name
 
-            //Real code
-            //row.push(this.templatesData[data[i].context.templateId]);//Template Name
+                //Real code
+                //row.push(this.templatesData[data[i].context.templateId]);//Template Name
 
-            //Code for displaying something with the mocked data, since the only
-            //existing template is not the one being used by the agreements.
-            row.push(this.templatesData[Object.keys(this.templatesData)[0]]);
+                //Code for displaying something with the mocked data, since the only
+                //existing template is not the one being used by the agreements.
+                row.push(this.templatesData[Object.keys(this.templatesData)[0]]);
 
-            row.push(data[i].context.serviceProvider);//Provider
-            row.push(data[i].context.service);//Service
+                row.push(data[i].context.serviceProvider);//Provider
+                row.push(data[i].context.service);//Service
 
-            transformedData.push(row);
+                transformedData.push(row);
+            }
         }
 
         return transformedData;
@@ -201,9 +213,41 @@
     /******************************** HANDLERS ************************************/
 
     // Preferences
-    //var handlerPreferences = function handlerPreferences(preferences) {
+    var handlerPreferences = function handlerPreferences(preferences) {
+        var needRequest = false;
+        var needUpdate = false;
 
-    //};
+        if (preferences.serverUrl != this.serverUrl) {
+            this.serverUrl = preferences.serverUrl;
+            needRequest = true;
+        }
+
+        if (preferences.user != this.user) {
+            this.user = preferences.user;
+            needRequest = true;
+        }
+
+        if (preferences.password != this.password) {
+            this.password = preferences.password;
+            needRequest = true;
+        }
+
+        if (preferences.statusFilter != this.statusFilter) {
+            this.statusFilter = preferences.statusFilter;
+            needUpdate = true;
+        }
+
+        if (preferences.providerFilter != this.providerFilter) {
+            this.providerFilter = preferences.providerFilter;
+            needUpdate = true;
+        }
+
+        if (needRequest) {
+            requestAgreements.call(this);
+        }else if(needUpdate){
+            displayData.call(this, this.agreements);
+        }
+    };
 
 
     /******************************** HELP FUNC ************************************/
