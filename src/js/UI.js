@@ -30,8 +30,19 @@ var UI = (function () {
                 }
             }
         });
+        createModalButton($('#agreements_table_paginate'));
         createSearchField($('#agreements_table_paginate'));
 
+    };
+
+    var createModalButton = function createModalButton (nextElement) {
+
+        $('<button>')
+            .html('<i class="fa fa-plus"></i>')
+            .addClass('btn btn-success action-button pull-left')
+            .attr('data-toggle', 'modal')
+            .attr('data-target', '#uploadImageModal')
+            .insertBefore(nextElement);
     };
 
     var createSearchField = function createSearchField (nextElement) {
@@ -60,7 +71,30 @@ var UI = (function () {
         });
     };
 
+    function startLoadingAnimation (element, icon) {
+
+        var bodyWidth = $('body').width();
+        var bodyHeight = $('body').height();
+
+        // Reference size is the smaller between height and width
+        var referenceSize = (bodyWidth < bodyHeight) ? bodyWidth : bodyHeight;
+        var font_size = referenceSize / 4;
+
+        icon.css('font-size', font_size);
+        element.removeClass('hide');
+
+    }
+
+    function stopLoadingAnimation (element) {
+
+        element.addClass('hide');
+
+    }
+
     return {
-        displayData: displayData
+        displayData: displayData,
+        startLoadingAnimation: startLoadingAnimation,
+        stopLoadingAnimation: stopLoadingAnimation
     };
+
 })();

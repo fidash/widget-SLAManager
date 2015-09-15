@@ -38,23 +38,12 @@
         //setWiringInputs.call(this);
         // Context:
         //setResizeWidget.call(this);
-        // User Interface:
-        //buildDOM.call(this);
         requestAgreements.call(this);
     };
 
     /******************************************************************************/
     /******************************** PRIVATE *************************************/
     /******************************************************************************/
-    /*var buildDOM = function buildDOM() {
-        /*this.status_select = new StyledElements.StyledSelect({'class': 'full'});
-        this.status_select.addEventListener('change', create_graph_config.bind(this));
-
-        statuses = [
-            {label: "All", value: "all"}
-        }
-        this.status_select.addEntries(statuses);*/
-    //};
 
     var makeRequest = function makeRequest(url, method, onSuccess, onFailure) {
         var baseURL = MashupPlatform.prefs.get("server_url");
