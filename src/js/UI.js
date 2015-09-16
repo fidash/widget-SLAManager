@@ -1,7 +1,7 @@
 var Global1 = "TEST";
 var UI = (function () {
     "use strict";
-    var dataTable = null;    
+    var dataTable = null;
 
     var displayData = function displayData(data) {
 
@@ -34,9 +34,12 @@ var UI = (function () {
             });
             createModalButton($('#agreements_table_paginate'));
             createSearchField($('#agreements_table_paginate'));
-        }else{// the table exists, so we need to refresh the data
+        }else {// the table exists, so we need to refresh the data
             dataTable.api().clear(); //we clear the data
-            dataTable.api().row.add(data);
+            for (var i in data) {
+                dataTable.api().row.add(data[i]);
+            }
+            dataTable.api().draw();
         }
     };
 
@@ -76,7 +79,7 @@ var UI = (function () {
         });
     };
 
-    function startLoadingAnimation (element, icon) {
+    var startLoadingAnimation = function startLoadingAnimation (element, icon) {
 
         var bodyWidth = $('body').width();
         var bodyHeight = $('body').height();
@@ -88,13 +91,13 @@ var UI = (function () {
         icon.css('font-size', font_size);
         element.removeClass('hide');
 
-    }
+    };
 
-    function stopLoadingAnimation (element) {
+    var stopLoadingAnimation = function stopLoadingAnimation (element) {
 
         element.addClass('hide');
 
-    }
+    };
 
     return {
         displayData: displayData,

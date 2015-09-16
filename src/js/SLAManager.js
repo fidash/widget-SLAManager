@@ -141,10 +141,14 @@
     /*Status    Actions Agreement Name  Template Name   Provider    Service    */
     var transformData = function transformData(data) {
         var transformedData = [];
+        var regexProvider = new RegExp(this.providerFilter, 'i');
+        var regexStatus = (this.statusFilter == 'all') ? new RegExp("", 'i') : new RegExp(this.statusFilter, 'i');
+
         for (var i in data) {
             var status = data[i].status.guaranteestatus;
-            if (status.toLowerCase() == this.statusFilter
-                /*&& data[i].context.serviceProvider*/) {//TODO add providerFilter
+            var provider = data[i].context.serviceProvider;
+
+            if (regexProvider.test(provider.replace(/ /g, '')) && regexStatus.test(status)) {//TODO add providerFilter
                 var row = [];
                 //Apparently we need to get the status separately, does not make much sense....
                 row.push(status); //Status
@@ -158,7 +162,7 @@
                 //existing template is not the one being used by the agreements.
                 row.push(this.templatesData[Object.keys(this.templatesData)[0]]);
 
-                row.push(data[i].context.serviceProvider);//Provider
+                row.push(provider);//Provider
                 row.push(data[i].context.service);//Service
 
                 transformedData.push(row);
@@ -217,35 +221,35 @@
         var needRequest = false;
         var needUpdate = false;
 
-        if (preferences.serverUrl != this.serverUrl) {
+        if (preferences.serverUrl) {
             this.serverUrl = preferences.serverUrl;
             needRequest = true;
         }
 
-        if (preferences.user != this.user) {
+        if (preferences.user) {
             this.user = preferences.user;
             needRequest = true;
         }
 
-        if (preferences.password != this.password) {
+        if (preferences.password) {
             this.password = preferences.password;
             needRequest = true;
         }
 
-        if (preferences.statusFilter != this.statusFilter) {
+        if (preferences.statusFilter) {
             this.statusFilter = preferences.statusFilter;
             needUpdate = true;
         }
 
-        if (preferences.providerFilter != this.providerFilter) {
+        if (preferences.providerFilter) {
             this.providerFilter = preferences.providerFilter;
             needUpdate = true;
         }
 
         if (needRequest) {
             requestAgreements.call(this);
-        }else if(needUpdate){
-            displayData.call(this, this.agreements);
+        }else if (needUpdate) {
+            displayData.call(this, this.agreementsData);
         }
     };
 
