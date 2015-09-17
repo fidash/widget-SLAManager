@@ -241,7 +241,7 @@
             needUpdate = true;
         }
 
-        if (preferences.providerFilter) {
+        if (preferences.providerFilter != null) {
             this.providerFilter = preferences.providerFilter;
             needUpdate = true;
         }
