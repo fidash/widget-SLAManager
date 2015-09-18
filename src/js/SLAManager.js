@@ -136,9 +136,22 @@
     var displayData = function displayData(data) {
         var newData = transformData.call(this, data);
         UI.displayData(newData);
+        UI.setDeleteCallback(function (id, row) {
+            deleteAgreement.call(this, id, row);
+        }.bind(this));
     };
 
-    /*Status    Actions Agreement Name  Template Name   Provider    Service    */
+    var deleteAgreement = function (id, row) {
+        makeRequest.call(this, "agreements/" + id, "DELETE",
+            function () {//onSuccess
+                console.log("Deleted agreement " + id);
+                UI.removeRow(row);
+            },
+            function () {//onFailure
+                console.log("Error: Could not delete agreement " + id);
+            });
+    };
+
     var transformData = function transformData(data) {
         var transformedData = [];
         var regexProvider = new RegExp(this.providerFilter, 'i');
@@ -150,9 +163,10 @@
 
             if (regexProvider.test(provider.replace(/ /g, '')) && regexStatus.test(status)) {//TODO add providerFilter
                 var row = [];
-                //Apparently we need to get the status separately, does not make much sense....
+                var deleteButton = UI.createDeleteButton();
+                row.push(i); //ID: Necessary for the delete button
                 row.push(status); //Status
-                row.push("Actions"); //TODO: Add delete
+                row.push(deleteButton); //TODO: Add delete button
                 row.push(data[i].name);//Agreement name
 
                 //Real code
@@ -172,16 +186,6 @@
         return transformedData;
     };
 
-    /*  agreementId: "87726a36-e570-4482-b3cc-1cb3d8998bb8"
-        context: Object
-            agreementInitiator: "user1@serviceuser.com"
-            agreementResponder: "Provider1"
-            expirationTime: "0024-03-07T11:08:24CET"
-            service: "Service1"
-            serviceProvider: "AgreementResponder"
-            templateId: "e7efbfc1-3039-44c1-82d5-3d0e04cf2368"
-    */
-
     var setAgreements = function setAgreements(response) {
         this.agreementsData = {};
         this.incompleted = response.length;
@@ -195,17 +199,6 @@
         }
     };
 
-    /*
-        context: Object
-            agreementInitiator: "Provider1"
-            agreementResponder: null
-            expirationTime: "0037-01-04T15:08:15CET"
-            service: "Service1"
-            serviceProvider: "AgreementInitiator"
-            templateId: null
-        name: "Template1"
-        templateId: "casdasd
-    */
     var setTemplates = function setTemplates(response) {
         this.templatesData = {};
 

@@ -8,6 +8,7 @@ var UI = (function () {
         if (!dataTable) {//this means the table has not been created yet
 
             var columns = [
+                {'title': 'ID'},
                 {'title': 'Status'},
                 {'title': 'Actions'},
                 {'title': 'Agreement Name'},
@@ -18,6 +19,12 @@ var UI = (function () {
 
             dataTable = $('#agreements_table').dataTable({
                 'columns': columns,
+                "columnDefs": [
+                    {
+                        "targets": 0,
+                        "visible": false
+                    }
+                ],
                 'data': data,
                 'dom': 't<"navbar navbar-default navbar-fixed-bottom"p>',
                 'binfo': false,
@@ -32,6 +39,7 @@ var UI = (function () {
                     }
                 }
             });
+
             createModalButton($('#agreements_table_paginate'));
             createSearchField($('#agreements_table_paginate'));
         }else {// the table exists, so we need to refresh the data
@@ -99,10 +107,38 @@ var UI = (function () {
 
     };
 
+    var createDeleteButton = function createDeleteButton () {
+        var wrapper = $('<div>');
+
+        var button = $('<button>')
+            .addClass('btn btn-danger')
+            .attr('name', 'delete-button')
+            .html('<i class="fa fa-trash"></i>')
+            .appendTo(wrapper);
+        return wrapper.html();
+    };
+
+    var setDeleteCallback = function setDeleteCallback (callback) {
+        $('button[name=delete-button]').on('click', function () {
+            var row = $(this).parent().parent();
+            var data = dataTable.api().row(row).data();
+            dataTable.api().draw();
+            callback(data[0], row);
+        });
+    };
+
+    var removeRow = function removeRow (row) {
+        dataTable.api().row(row).remove();
+        dataTable.api().draw();
+    };
+
     return {
         displayData: displayData,
         startLoadingAnimation: startLoadingAnimation,
-        stopLoadingAnimation: stopLoadingAnimation
+        stopLoadingAnimation: stopLoadingAnimation,
+        createDeleteButton: createDeleteButton,
+        setDeleteCallback: setDeleteCallback,
+        removeRow: removeRow
     };
 
 })();

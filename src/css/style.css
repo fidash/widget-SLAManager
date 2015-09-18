@@ -157,3 +157,7 @@ input[name=x-image-meta-location] {
     width: 150px;
     left: 0px;
 }
+
+.delete-button {
+    margin-left: 18px;
+}

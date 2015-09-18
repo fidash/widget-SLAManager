@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="sla_manager" version="0.1">
   <details>
-    <title>SLA Manager Widget</title>
+    <title>SLA Manager</title>
     <email>wirecloud@conwet.com</email>
     <image>images/catalogue.png</image>
     <smartphoneimage>images/catalogue.png</smartphoneimage>
