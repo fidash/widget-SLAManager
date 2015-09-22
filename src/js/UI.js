@@ -2,6 +2,7 @@ var Global1 = "TEST";
 var UI = (function () {
     "use strict";
     var dataTable = null;
+    var callbacks = {};
 
     var displayData = function displayData(data) {
 
@@ -41,7 +42,9 @@ var UI = (function () {
             });
 
             createModalButton($('#agreements_table_paginate'));
+            createRefreshButton($('#agreements_table_paginate'), callbacks.refresh);
             createSearchField($('#agreements_table_paginate'));
+
         }else {// the table exists, so we need to refresh the data
             dataTable.api().clear(); //we clear the data
             for (var i in data) {
@@ -49,6 +52,8 @@ var UI = (function () {
             }
             dataTable.api().draw();
         }
+
+        setDeleteCallback(callbacks.remove);
     };
 
     var createModalButton = function createModalButton (nextElement) {
@@ -118,12 +123,18 @@ var UI = (function () {
         return wrapper.html();
     };
 
+    var setCallbacks = function setCallbacks (newCallbacks) {
+        if (!dataTable) {
+            callbacks = newCallbacks;
+        }
+    };
+
     var setDeleteCallback = function setDeleteCallback (callback) {
         $('button[name=delete-button]').on('click', function () {
             var row = $(this).parent().parent();
             var data = dataTable.api().row(row).data();
             dataTable.api().draw();
-            callback(data[0], row);
+            callbacks.remove(data[0], row);
         });
     };
 
@@ -132,12 +143,21 @@ var UI = (function () {
         dataTable.api().draw();
     };
 
+    var createRefreshButton = function createRefreshButton (nextElement, refreshCallback) {
+
+        $('<button>')
+            .html('<i class="fa fa-refresh"></i>')
+            .addClass('btn btn-default action-button pull-left')
+            .click(callbacks.refresh)
+            .insertBefore(nextElement);
+    };
+
     return {
         displayData: displayData,
         startLoadingAnimation: startLoadingAnimation,
         stopLoadingAnimation: stopLoadingAnimation,
         createDeleteButton: createDeleteButton,
-        setDeleteCallback: setDeleteCallback,
+        setCallbacks: setCallbacks,
         removeRow: removeRow
     };
 

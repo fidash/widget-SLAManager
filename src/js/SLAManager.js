@@ -135,12 +135,19 @@
     };
 
     var displayData = function displayData(data) {
-        var newData = transformData.call(this, data);
-        UI.displayData(newData);
 
-        UI.setDeleteCallback(function (id, row) {
-            deleteAgreement.call(this, id, row);
-        }.bind(this));
+        var callbacks = {
+            remove: function (id, row) {
+                deleteAgreement.call(this, id, row);
+            }.bind(this),
+            refresh: function () {
+                requestAgreements.call(this);
+            }.bind(this)
+        };
+
+        var newData = transformData.call(this, data);
+        UI.setCallbacks(callbacks);
+        UI.displayData(newData);
     };
 
     var deleteAgreement = function (id, row) {
