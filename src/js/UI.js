@@ -57,7 +57,7 @@ var UI = (function () {
             .html('<i class="fa fa-plus"></i>')
             .addClass('btn btn-success action-button pull-left')
             .attr('data-toggle', 'modal')
-            .attr('data-target', '#uploadImageModal')
+            .attr('data-target', '#createAgreementModal')
             .insertBefore(nextElement);
     };
 

@@ -24,5 +24,37 @@
     </head>
     <body>
         <table id="agreements_table" class="display" cellpadding="0" border="0" cellspacing="0" width="100%"></table>
+        <div id="createAgreementModal" class="modal fade" style="top: 0px; display: none;" aria-hidden="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding-top:0; padding-bottom: 0;">
+                        <a href="#" class="close" data-dismiss="modal">×</a>
+                        <h3>Create agreement</h3>
+                    </div>
+                    <form id="create_agreement_form" name="" autocomplete="" enctype="multipart/form-data">
+                        <div class="modal-body clearfix">
+                            <fieldset>
+                                <div class="form-group required">
+                                    <label class="control-label  required" for="agreement-input">Name</label>
+                                    <div class=" ">
+                                        <input class="form-control" id="agreement-input" maxlength="255" name="name" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label  required" for="template-input">Template Name</label>
+                                    <div class=" ">
+                                        <input class="form-control" id="template-input" maxlength="255" name="template-name" type="text">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="create-agreement" class="btn btn-primary pull-right" style="margin-left: 10px">Create Agreement</button>
+                            <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>   
+            </div>
+        </div>
     </body>
 </html>

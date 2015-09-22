@@ -38,6 +38,7 @@
         // Context:
         //setResizeWidget.call(this);
         requestAgreements.call(this);
+        setCreateCallback.call(this);
     };
 
     /******************************************************************************/
@@ -136,6 +137,7 @@
     var displayData = function displayData(data) {
         var newData = transformData.call(this, data);
         UI.displayData(newData);
+
         UI.setDeleteCallback(function (id, row) {
             deleteAgreement.call(this, id, row);
         }.bind(this));
@@ -205,6 +207,31 @@
         for (var i in response) {
             this.templatesData[response[i].templateId] = response[i].name; //The only thing we need is the names
         }
+    };
+
+    var createAgreement = function createAgreement () {
+        var form = $('#create_agreement_form');
+        var fields = readFormFields(form);
+        console.dir(fields);
+    };
+
+    var readFormFields = function readFormFields (form) {
+
+        var fields = {};
+
+        $.each(form.serializeArray(), function (i, field) {
+            if (field.value !== "") {
+                fields[field.name] = field.value;
+            }
+        });
+
+        return fields;
+    };
+
+    var setCreateCallback = function setCreateCallback () {
+        $('#create-agreement').on('click', function () {
+            createAgreement.call(this);
+        }.bind(this));
     };
 
     /******************************** HANDLERS ************************************/
