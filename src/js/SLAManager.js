@@ -75,6 +75,8 @@
 
     var requestAgreements = function requestAgreements() {
 
+        UI.startLoadingAnimation();
+
         makeRequest.call(this, "agreements", "GET",
             function (response) {
                 setAgreements.call(this, JSON.parse(response.response));
@@ -117,6 +119,7 @@
             if (!this.incompleted) {
                 displayData.call(this, this.agreementsData);
             }
+
         }.bind(this);
 
         var onFailure = function (response) {
@@ -148,6 +151,7 @@
         var newData = transformData.call(this, data);
         UI.setCallbacks(callbacks);
         UI.displayData(newData);
+        UI.stopLoadingAnimation();
     };
 
     var deleteAgreement = function (id, row) {

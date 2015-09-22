@@ -92,10 +92,13 @@ var UI = (function () {
         });
     };
 
-    var startLoadingAnimation = function startLoadingAnimation (element, icon) {
+    var startLoadingAnimation = function startLoadingAnimation () {
 
         var bodyWidth = $('body').width();
         var bodyHeight = $('body').height();
+
+        var element = $('.loading');
+        var icon = $('.loading i');
 
         // Reference size is the smaller between height and width
         var referenceSize = (bodyWidth < bodyHeight) ? bodyWidth : bodyHeight;
@@ -103,12 +106,14 @@ var UI = (function () {
 
         icon.css('font-size', font_size);
         element.removeClass('hide');
+        $('#container').addClass('transparent');
 
     };
 
-    var stopLoadingAnimation = function stopLoadingAnimation (element) {
-
+    var stopLoadingAnimation = function stopLoadingAnimation () {
+        var element = $('.loading');
         element.addClass('hide');
+        $('#container').removeClass('transparent');
 
     };
 

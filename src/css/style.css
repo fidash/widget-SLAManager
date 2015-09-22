@@ -96,8 +96,13 @@ tr button.btn.btn-primary {
     min-height: 40px;
 }
 
+.transparent {
+    opacity: 0.5;
+}
+
 .loading {
     position: absolute;
+    z-index: 150;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
