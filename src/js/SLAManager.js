@@ -35,8 +35,6 @@
         // Preferences:
         setPreferences.call(this);
 
-        // Context:
-        //setResizeWidget.call(this);
         requestAgreements.call(this);
         setCreateCallback.call(this);
     };
@@ -54,14 +52,14 @@
         MashupPlatform.prefs.registerCallback(handlerPreferences.bind(this));
     };
 
-    var makeRequest = function makeRequest(url, method, onSuccess, onFailure) {
+    var makeRequest = function makeRequest(url, method, onSuccess, onFailure, postBody) {
         var baseURL = this.serverUrl;
         if (baseURL[baseURL.length - 1] !== "/") {
             baseURL += "/";
         }
         baseURL += url;
 
-        MashupPlatform.http.makeRequest(baseURL, {
+        var options = {
             method: method,
             requestHeaders: {
                 user: this.user,
@@ -70,7 +68,13 @@
             },
             onSuccess: onSuccess,
             onFailure: onFailure
-        });
+        };
+
+        if (postBody) {
+            options.postBody = postBody;
+        }
+
+        MashupPlatform.http.makeRequest(baseURL, options);
     };
 
     var requestAgreements = function requestAgreements() {
@@ -88,7 +92,6 @@
             }
         );
     };
-
 
 
     var requestTemplates = function requestTemplates() {
@@ -179,14 +182,15 @@
                 var deleteButton = UI.createDeleteButton();
                 row.push(i); //ID: Necessary for the delete button
                 row.push(status); //Status
-                row.push(deleteButton); //TODO: Add delete button
+                row.push(deleteButton);
                 row.push(data[i].name);//Agreement name
 
-                //Real code
+                //Real code FOR REAL API INSTEAD OF MOCK
                 //row.push(this.templatesData[data[i].context.templateId]);//Template Name
 
                 //Code for displaying something with the mocked data, since the only
                 //existing template is not the one being used by the agreements.
+                //TL;DR: DELETE THIS FOR USING REAL API INSTEAD OF MOCK
                 row.push(this.templatesData[Object.keys(this.templatesData)[0]]);
 
                 row.push(provider);//Provider
@@ -224,6 +228,17 @@
         var form = $('#create_agreement_form');
         var fields = readFormFields(form);
         console.dir(fields);
+
+        //TODO: End create POST
+        makeRequest.call(this, 'agreements', 'POST', 
+            function () {
+                console.log("Agreement Created");
+                requestAgreements.call(this);
+            }.bind(this)),
+            function () {
+                console.log("error creating Agreement");
+            },
+            fields);
     };
 
     var readFormFields = function readFormFields (form) {
