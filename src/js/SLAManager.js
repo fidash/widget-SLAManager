@@ -230,11 +230,11 @@
         console.dir(fields);
 
         //TODO: End create POST
-        makeRequest.call(this, 'agreements', 'POST', 
+        makeRequest.call(this, 'agreements', 'POST',
             function () {
                 console.log("Agreement Created");
                 requestAgreements.call(this);
-            }.bind(this)),
+            }.bind(this),
             function () {
                 console.log("error creating Agreement");
             },
