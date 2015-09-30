@@ -1,7 +1,7 @@
 {
   "vendor": "UPM-ETSIINF",
   "name": "SLAManager-widget",
-  "version": "0.1.0",
+  "version": "0.6.0",
   "description": "FIDASH widget to manage Service Level Agreements.",
   "repository": {
     "type": "git",
