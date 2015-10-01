@@ -1,6 +1,7 @@
 SLA Manager Widget
-======================
+==================
 
+[![Build Status](https://build.conwet.fi.upm.es/jenkins/view/FI-Dash/job/Widget%20SLAManager/badge/icon)](https://build.conwet.fi.upm.es/jenkins/view/FI-Dash/job/Widget%20SLAManager/)
 
 Build
 -----
