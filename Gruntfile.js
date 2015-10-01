@@ -112,34 +112,26 @@ module.exports = function (grunt) {
             }
         },
 
-        jasmine: {
-            test: {
-                src: ['src/js/*.js'],
-                options: {
-                    specs: 'src/test/js/*Spec.js',
-                    helpers: ['src/test/helpers/*.js'],
-                    vendor: ['src/test/vendor/*.js']
-                }
-            },
-
-            coverage: {
-                src: '<%= jasmine.test.src %>',
-                options: {
-                    helpers: '<%= jasmine.test.options.helpers %>',
-                    specs: '<%= jasmine.test.options.specs %>',
-                    vendor: '<%= jasmine.test.options.vendor %>',
-                    template: require('grunt-template-jasmine-istanbul'),
-                    templateOptions : {
-                        coverage: 'build/coverage/json/coverage.json',
-                        report: [
-                            {type: 'html', options: {dir: 'build/coverage/html'}},
-                            {type: 'cobertura', options: {dir: 'build/coverage/xml'}},
-                            {type: 'text-summary'}
-                        ]
-                    }
-                }
+        karma: {
+          headless: {
+            configFile: 'karma.conf.js',
+            options: {
+              browsers: ['PhantomJS']
             }
-        }
+          },
+
+          all: {
+            configFile: 'karma.conf.js'
+          },
+
+          debug: {
+            configFile: 'karma.conf.js',
+            options: {
+              preprocessors: [],
+              singleRun: false
+            }
+          }
+        },
 
     });
 
@@ -151,12 +143,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-jscs");
     grunt.loadNpmTasks('grunt-strip-code');
     grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks('grunt-karma');
 
     grunt.registerTask('test', [
         'jshint:grunt',
         'jshint',
         'jscs',
-        //'jasmine:coverage'
+        'karma:headless'
     ]);
 
     grunt.registerTask('default', [

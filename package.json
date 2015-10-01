@@ -30,9 +30,20 @@
     "grunt-contrib-jasmine": "^0.8.1",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-jscs": "^1.2.0",
+    "grunt-karma": "^0.12.1",
     "grunt-strip-code": "^0.1.2",
     "grunt-template-jasmine-istanbul": "^0.3.0",
     "grunt-text-replace": "^0.3.12",
-    "jasmine-jquery": "~2.0.6"
+    "jasmine-core": "^2.3.4",
+    "jasmine-jquery": "~2.0.6",
+    "karma": "^0.13.10",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-coverage": "^0.5.2",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-fixture": "^0.2.5",
+    "karma-jasmine": "^0.3.6",
+    "karma-junit-reporter": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "phantomjs": "^1.9.18"
   }
 }
