@@ -14,57 +14,42 @@
  * limitations under the License.
  */
 
-(function () {
+/* global Utils */
+var SLAManager = (function () {
 
     "use strict";
 
-    /******************************************************************************/
-    /********************************* PUBLIC *************************************/
-    /******************************************************************************/
+    var ERRORS = {
+        '500 Error': 'An error has occurred on the server side.',
+        '503 Error': 'Cloud service is not available at the moment.',
+        '422 Error': 'You are not authenticated in the wirecloud platform.'
+    };
+    //var BASE_URL = "http://130.206.113.159/sla-service";
+    var BASE_URL = "http://private-anon-c19d8c469-slamanagercore.apiary-mock.com";
 
-    // Constructor
+    /******************************************************************/
+    /*                      C O N S T R U C T O R                     */
+    /******************************************************************/
+
     var SLAManager = function SLAManager() {
-        this.statusSelect = null;
-        this.agreementsData = null;
-        this.templatesData = null;
-        this.incompleted = 0;
-        this.datatable = {};
+        this.init = init;
     };
 
-    SLAManager.prototype.init = function init() {
-        // Preferences:
-        setPreferences.call(this);
 
-        requestAgreements.call(this);
-        setCreateCallback.call(this);
-    };
+    /******************************************************************/
+    /*                P R I V A T E   F U N C T I O N S               */
+    /******************************************************************/
 
-    /******************************************************************************/
-    /******************************** PRIVATE *************************************/
-    /******************************************************************************/
-
-    var setPreferences = function setPreferences() {
-        this.serverUrl = MashupPlatform.prefs.get("serverUrl");
-        this.user = MashupPlatform.prefs.get("user");
-        this.password = MashupPlatform.prefs.get("password");
-        this.statusFilter = MashupPlatform.prefs.get("statusFilter");
-        this.providerFilter = MashupPlatform.prefs.get("providerFilter");
-        MashupPlatform.prefs.registerCallback(handlerPreferences.bind(this));
-    };
-
-    var makeRequest = function makeRequest(url, method, onSuccess, onFailure, postBody) {
-        var baseURL = this.serverUrl;
-        if (baseURL[baseURL.length - 1] !== "/") {
-            baseURL += "/";
-        }
-        baseURL += url;
-
+    function makeRequest(url, method, onSuccess, onFailure, postBody) {
+        var user = MashupPlatform.prefs.get("user");
+        var password = MashupPlatform.prefs.get("password");
+        var token = window.btoa(user + ":" + password);
         var options = {
             method: method,
             requestHeaders: {
-                user: this.user,
-                password: this.password,
-                Accept: "application/json"
+                Authorization: "Basic " + token,
+                Accept: "application/json",
+                "Content-type": "application/json"
             },
             onSuccess: onSuccess,
             onFailure: onFailure
@@ -74,174 +59,51 @@
             options.postBody = postBody;
         }
 
-        MashupPlatform.http.makeRequest(baseURL, options);
-    };
+        MashupPlatform.http.makeRequest(url, options);
+    }
 
-    var requestAgreements = function requestAgreements() {
+    function onError (error) {
 
-        UI.startLoadingAnimation();
-
-        makeRequest.call(this, "agreements", "GET",
-            function (response) {
-                setAgreements.call(this, JSON.parse(response.response));
-                requestTemplates.call(this);
-            }.bind(this),
-
-            function () {
-                console.log("Error retrieving the agreements data");
-            }
-        );
-    };
-
-
-    var requestTemplates = function requestTemplates() {
-
-        makeRequest.call(this, "templates", "GET",
-            function (response) {
-                setTemplates.call(this, JSON.parse(response.response));
-                requestStatus.call(this);
-            }.bind(this),
-            function () {
-                console.log("Error retrieving the templates data");
-            }
-        );
-    };
-
-    var requestStatus = function requestStatus() {
-
-        var onSuccess = function (response) {
-            var id = response.request.url.split("/")[7];
-            var resp = JSON.parse(response.response);
-            this.agreementsData[id].status = {
-                guaranteestatus: resp.guaranteestatus,
-                guaranteeterms: resp.guaranteeterms
-            };
-
-            this.incompleted--;
-
-            if (!this.incompleted) {
-                displayData.call(this, this.agreementsData);
-            }
-
-        }.bind(this);
-
-        var onFailure = function (response) {
-            this.agreementsData[id].status = "-";
-            console.log("Error retrieving the status data");
-            this.incompleted--;
-
-            if (!this.incompleted) {
-                displayData.call(this, this.agreementsData);
-            }
-        }.bind(this);
-
-        for (var id in this.agreementsData) {
-            makeRequest.call(this, "agreements/" + id + "/guaranteestatus", "GET", onSuccess, onFailure);
+        if (error.message in ERRORS) {
+            Utils.createAlert('danger', 'Error', ERRORS[error.message], error);            
         }
-    };
+        else {
+            Utils.createAlert('danger', error.message, error.body);
+        }
 
-    var displayData = function displayData(data) {
+        console.log('Error: ' + JSON.stringify(error));
+    }
 
-        var callbacks = {
-            remove: function (id, row) {
-                deleteAgreement.call(this, id, row);
-            }.bind(this),
-            refresh: function () {
-                requestAgreements.call(this);
-            }.bind(this)
-        };
+    function getAgreements(autoRefresh) {
 
-        var newData = transformData.call(this, data);
-        UI.setCallbacks(callbacks);
-        UI.displayData(newData);
-        UI.stopLoadingAnimation();
-    };
+        makeRequest(BASE_URL + "/agreements", "GET",
+            function (response) {
+                UI.displayData(getAgreements, autoRefresh, JSON.parse(response.responseText));
+            }, onError);
+    }
 
-    var deleteAgreement = function (id, row) {
-        makeRequest.call(this, "agreements/" + id, "DELETE",
+    function deleteAgreement (id, row) {
+        makeRequest(BASE_URL + "/agreements/" + id, "DELETE",
             function () {//onSuccess
                 console.log("Deleted agreement " + id);
                 UI.removeRow(row);
-            },
-            function () {//onFailure
-                console.log("Error: Could not delete agreement " + id);
-            });
-    };
+                getAgreements();
+            }, onError);
+    }
 
-    var transformData = function transformData(data) {
-        var transformedData = [];
-        var regexProvider = new RegExp(this.providerFilter, 'i');
-        var regexStatus = (this.statusFilter == 'all') ? new RegExp("", 'i') : new RegExp(this.statusFilter, 'i');
-
-        for (var i in data) {
-            var status = data[i].status.guaranteestatus;
-            var provider = data[i].context.serviceProvider;
-
-            if (regexProvider.test(provider.replace(/ /g, '')) && regexStatus.test(status)) {//TODO add providerFilter
-                var row = [];
-                var deleteButton = UI.createDeleteButton();
-                row.push(i); //ID: Necessary for the delete button
-                row.push(status); //Status
-                row.push(deleteButton);
-                row.push(data[i].name);//Agreement name
-
-                //Real code FOR REAL API INSTEAD OF MOCK
-                //row.push(this.templatesData[data[i].context.templateId]);//Template Name
-
-                //Code for displaying something with the mocked data, since the only
-                //existing template is not the one being used by the agreements.
-                //TL;DR: DELETE THIS FOR USING REAL API INSTEAD OF MOCK
-                row.push(this.templatesData[Object.keys(this.templatesData)[0]]);
-
-                row.push(provider);//Provider
-                row.push(data[i].context.service);//Service
-
-                transformedData.push(row);
-            }
-        }
-
-        return transformedData;
-    };
-
-    var setAgreements = function setAgreements(response) {
-        this.agreementsData = {};
-        this.incompleted = response.length;
-
-        for (var i in response) {
-            this.agreementsData[response[i].agreementId] = {
-                context: response[i].context,
-                name: response[i].name,
-                terms: response[i].terms
-            };
-        }
-    };
-
-    var setTemplates = function setTemplates(response) {
-        this.templatesData = {};
-
-        for (var i in response) {
-            this.templatesData[response[i].templateId] = response[i].name; //The only thing we need is the names
-        }
-    };
-
-    var createAgreement = function createAgreement () {
+    function createAgreement () {
         var form = $('#create_agreement_form');
         var fields = readFormFields(form);
         console.dir(fields);
 
         //TODO: End create POST
-        makeRequest.call(this, 'agreements', 'POST',
+        makeRequest(BASE_URL + '/agreements', 'POST',
             function () {
-                console.log("Agreement Created");
-                requestAgreements.call(this);
-            }.bind(this),
-            function () {
-                console.log("error creating Agreement");
-            },
-            fields);
-    };
+                getAgreements();
+            }, onError, fields);
+    }
 
-    var readFormFields = function readFormFields (form) {
+    function readFormFields (form) {
 
         var fields = {};
 
@@ -252,57 +114,17 @@
         });
 
         return fields;
-    };
-
-    var setCreateCallback = function setCreateCallback () {
-        $('#create-agreement').on('click', function () {
-            createAgreement.call(this);
-        }.bind(this));
-    };
-
-    /******************************** HANDLERS ************************************/
-
-    // Preferences
-    var handlerPreferences = function handlerPreferences(preferences) {
-        var needRequest = false;
-        var needUpdate = false;
-
-        if (preferences.serverUrl) {
-            this.serverUrl = preferences.serverUrl;
-            needRequest = true;
-        }
-
-        if (preferences.user) {
-            this.user = preferences.user;
-            needRequest = true;
-        }
-
-        if (preferences.password) {
-            this.password = preferences.password;
-            needRequest = true;
-        }
-
-        if (preferences.statusFilter) {
-            this.statusFilter = preferences.statusFilter;
-            needUpdate = true;
-        }
-
-        if (preferences.providerFilter != null) {
-            this.providerFilter = preferences.providerFilter;
-            needUpdate = true;
-        }
-
-        if (needRequest) {
-            requestAgreements.call(this);
-        }else if (needUpdate) {
-            displayData.call(this, this.agreementsData);
-        }
-    };
+    }
 
 
-    /******************************** HELP FUNC ************************************/
+    /******************************************************************/
+    /*                 P U B L I C   F U N C T I O N S                */
+    /******************************************************************/
 
+    function init () {
+        UI.createTable(getAgreements, createAgreement);
+        getAgreements(true);
+    }
 
-    window.SLAManager = SLAManager;
-
+    return SLAManager;
 })();
