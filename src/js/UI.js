@@ -48,6 +48,7 @@ var UI = (function () {
             'binfo': false,
             'pagingType': 'full_numbers',
             'info': false,
+            'order': [],
             "language": {
                 "paginate": {
                     "first": '<i class="fa fa-fast-backward"></i>',
