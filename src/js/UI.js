@@ -120,8 +120,8 @@ var UI = (function () {
                 agreement.context.agreementInitiator,
                 agreement.context.agreementResponder,
                 agreement.context.service,
-                Utils.getDisplayableConditions(agreement.terms.guaranteeTerms),
-                agreement.context.expirationTime
+                Utils.getDisplayableConditions(agreement.terms.allTerms.guaranteeTerms),
+                Utils.formatDate(agreement.context.expirationTime)
             ])
             .draw()
             .nodes()

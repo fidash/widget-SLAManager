@@ -1,6 +1,38 @@
 var Utils = (function() {
 	"use strict";
 
+    var COMPARATORS = {
+        "LT": "<",
+        "GT": ">",
+        "LE": "<=",
+        "GE": ">="
+    };
+
+
+    /******************************************************************/
+    /*                P R I V A T E   F U N C T I O N S               */
+    /******************************************************************/
+
+    function formatCondition (rawCondition) {
+        
+        var formattedCondition = JSON.parse(rawCondition).constraint;
+        
+        for (var comparator in COMPARATORS) {
+             formattedCondition = formattedCondition.replace(comparator, COMPARATORS[comparator]);
+        }
+
+        if (formattedCondition.indexOf("perc") > -1) {
+            formattedCondition += "%";
+        }
+
+        return formattedCondition;
+    }
+
+
+    /******************************************************************/
+    /*                 P U B L I C   F U N C T I O N S                */
+    /******************************************************************/
+
 	function createAlert (type, title, message, details) {
 
         // TODO buffer and show them on a list instead of removing them
@@ -45,12 +77,27 @@ var Utils = (function() {
     }
 
     function getDisplayableConditions (conditions) {
-        // TODO
-        return "";
+        
+        var conditionsString = "";
+        var formattedCondition;
+
+        conditions.forEach(function (condition) {
+            formattedCondition = formatCondition(condition.serviceLevelObjetive.kpitarget.customServiceLevel);
+            conditionsString += formattedCondition + "<br/>";
+        });
+
+        return conditionsString;
+    }
+
+    function formatDate (dateString) {
+        dateString = dateString.replace("CET", "");
+        var date = new Date(dateString);
+        return date.toUTCString();
     }
 
     return {
     	createAlert: createAlert,
-        getDisplayableConditions: getDisplayableConditions
+        getDisplayableConditions: getDisplayableConditions,
+        formatDate: formatDate
     };
 })();
