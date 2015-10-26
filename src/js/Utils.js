@@ -32,6 +32,7 @@ var Utils = (function() {
     function formatCondition (rawCondition) {
         
         var formattedCondition = JSON.parse(rawCondition).constraint;
+        var conditionName = formattedCondition.split(" ")[0].toLowerCase();
         
         for (var comparator in COMPARATORS) {
              formattedCondition = formattedCondition.replace(comparator, COMPARATORS[comparator]);
@@ -41,7 +42,7 @@ var Utils = (function() {
             formattedCondition += "%";
         }
 
-        return formattedCondition;
+        return '<div class="' + conditionName + '">' + formattedCondition + "</div>";
     }
 
 
@@ -99,7 +100,7 @@ var Utils = (function() {
 
         conditions.forEach(function (condition) {
             formattedCondition = formatCondition(condition.serviceLevelObjetive.kpitarget.customServiceLevel);
-            conditionsString += formattedCondition + "<br/>";
+            conditionsString += formattedCondition;
         });
 
         return conditionsString;
