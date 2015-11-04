@@ -65,7 +65,7 @@ var SLAManager = (function () {
     function onError (error) {
 
         if (error.message in ERRORS) {
-            Utils.createAlert('danger', 'Error', ERRORS[error.message], error);            
+            Utils.createAlert('danger', 'Error', ERRORS[error.message], error);
         }
         else {
             Utils.createAlert('danger', error.message, error.body);

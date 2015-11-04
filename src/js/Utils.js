@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-var Utils = (function() {
-	"use strict";
+
+var Utils = (function () {
+    "use strict";
 
     var COMPARATORS = {
         "LT": "<",
@@ -30,11 +30,11 @@ var Utils = (function() {
     /******************************************************************/
 
     function formatCondition (rawCondition, status) {
-        
+
         var formattedCondition = JSON.parse(rawCondition).constraint;
-        
+
         for (var comparator in COMPARATORS) {
-             formattedCondition = formattedCondition.replace(comparator, COMPARATORS[comparator]);
+            formattedCondition = formattedCondition.replace(comparator, COMPARATORS[comparator]);
         }
 
         if (formattedCondition.indexOf("perc") > -1) {
@@ -57,12 +57,12 @@ var Utils = (function() {
     /*                 P U B L I C   F U N C T I O N S                */
     /******************************************************************/
 
-	function createAlert (type, title, message, details) {
+    function createAlert (type, title, message, details) {
 
         // TODO buffer and show them on a list instead of removing them
         // Hide previous alerts
         $('.alert').hide();
- 
+
         var alert = $('<div>')
             .addClass('alert alert-dismissible alert-' + type + ' fade in')
             .attr('role', 'alert')
@@ -101,7 +101,7 @@ var Utils = (function() {
     }
 
     function getDisplayableConditions (conditions, statusList) {
-        
+
         var conditionsString = "";
         var formattedCondition;
         var status;
@@ -119,13 +119,13 @@ var Utils = (function() {
 
         // Remove extra "CET" that makes the date string invalid
         dateString = dateString.replace("CET", "");
-        
+
         var date = new Date(dateString);
         return date.toUTCString();
     }
 
     return {
-    	createAlert: createAlert,
+        createAlert: createAlert,
         getDisplayableConditions: getDisplayableConditions,
         formatDate: formatDate
     };

@@ -70,7 +70,7 @@ var UI = (function () {
 
         searchButton.on('click', function () {
             focusState = !focusState;
-            
+
             searchInput.toggleClass('slideRight');
             searchButton.parent()
                 .css('z-index', 20);
@@ -83,7 +83,7 @@ var UI = (function () {
             }
         });
 
-        searchInput.on( 'keyup', function () {
+        searchInput.on('keyup', function () {
             dataTable.api().search(this.value).draw();
         });
     }
@@ -143,13 +143,13 @@ var UI = (function () {
     function setStatusDropdownEvents () {
         var options = [];
 
-        $( '.dropdown-menu a' ).on( 'click', function( e ) {
-            
+        $('.dropdown-menu a').on('click', function (e) {
+
             var input = $('input', this);
-            
+
             input.prop('checked', true);
             dataTable.api().columns(6).search(input.val()).draw();
-            
+
             return false;
         });
     }
@@ -224,7 +224,7 @@ var UI = (function () {
         $('#create-agreement').on('click', createCallback);
 
         initFixedHeader();
-        
+
     }
 
     function displayData (getStatus, refreshCallback, autoRefresh, data) {
