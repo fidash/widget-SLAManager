@@ -154,14 +154,14 @@ var UI = (function () {
         });
     }
 
-    function buildTableBody (data, getStatus) {
+    function buildTableBody (data, getAgreementStatus) {
 
         var nRows = data.length;
         var rows = [];
 
         data.forEach(function (agreement) {
 
-            getStatus(agreement.agreementId, function (response) {
+            getAgreementStatus(agreement.agreementId, function (response) {
 
                 var status = JSON.parse(response.responseText);
 
@@ -227,13 +227,13 @@ var UI = (function () {
 
     }
 
-    function displayData (getStatus, refreshCallback, autoRefresh, data) {
+    function displayData (getAgreementStatus, refreshCallback, autoRefresh, data) {
 
         // Save previous scroll and page
         var scroll = $(window).scrollTop();
         var page = dataTable.api().page();
 
-        buildTableBody(data, getStatus);
+        buildTableBody(data, getAgreementStatus);
 
         // Restore previous scroll and page
         $(window).scrollTop(scroll);

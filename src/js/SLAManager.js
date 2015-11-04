@@ -78,12 +78,12 @@ var SLAManager = (function () {
 
         makeRequest(BASE_URL + "/agreements", "GET",
             function (response) {
-                UI.displayData(getStatus, getAgreements, autoRefresh, JSON.parse(response.responseText));
+                UI.displayData(getAgreementStatus, getAgreements, autoRefresh, JSON.parse(response.responseText));
             }, onError);
     }
 
-    function getStatus (id, success) {
-        makeRequest(BASE_URL + "/agreements/" + id + "/guaranteestatus", "GET", success);
+    function getAgreementStatus (id, success) {
+        makeRequest(BASE_URL + "/agreements/" + id + "/guaranteestatus", "GET", success, onError);
     }
 
     function createAgreement () {
