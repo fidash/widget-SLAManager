@@ -29,10 +29,9 @@ var Utils = (function() {
     /*                P R I V A T E   F U N C T I O N S               */
     /******************************************************************/
 
-    function formatCondition (rawCondition) {
+    function formatCondition (rawCondition, status) {
         
         var formattedCondition = JSON.parse(rawCondition).constraint;
-        var conditionName = formattedCondition.split(" ")[0].toLowerCase();
         
         for (var comparator in COMPARATORS) {
              formattedCondition = formattedCondition.replace(comparator, COMPARATORS[comparator]);
@@ -42,7 +41,15 @@ var Utils = (function() {
             formattedCondition += "%";
         }
 
-        return '<div class="' + conditionName + '">' + formattedCondition + "</div>";
+        return '<div class="' + status.toLowerCase() + '">' + formattedCondition + "</div>";
+    }
+
+    function findStatus (name, statusList) {
+        for (var status in statusList) {
+            if (name === statusList[status].name) {
+                return statusList[status].status;
+            }
+        }
     }
 
 
@@ -93,13 +100,15 @@ var Utils = (function() {
 
     }
 
-    function getDisplayableConditions (conditions) {
+    function getDisplayableConditions (conditions, statusList) {
         
         var conditionsString = "";
         var formattedCondition;
+        var status;
 
         conditions.forEach(function (condition) {
-            formattedCondition = formatCondition(condition.serviceLevelObjetive.kpitarget.customServiceLevel);
+            status = findStatus(condition.name, statusList);
+            formattedCondition = formatCondition(condition.serviceLevelObjetive.kpitarget.customServiceLevel, status);
             conditionsString += formattedCondition;
         });
 

@@ -78,17 +78,12 @@ var SLAManager = (function () {
 
         makeRequest(BASE_URL + "/agreements", "GET",
             function (response) {
-                UI.displayData(getAgreements, autoRefresh, JSON.parse(response.responseText));
+                UI.displayData(getStatus, getAgreements, autoRefresh, JSON.parse(response.responseText));
             }, onError);
     }
 
-    function deleteAgreement (id, row) {
-        makeRequest(BASE_URL + "/agreements/" + id, "DELETE",
-            function () {//onSuccess
-                console.log("Deleted agreement " + id);
-                UI.removeRow(row);
-                getAgreements();
-            }, onError);
+    function getStatus (id, success) {
+        makeRequest(BASE_URL + "/agreements/" + id + "/guaranteestatus", "GET", success);
     }
 
     function createAgreement () {

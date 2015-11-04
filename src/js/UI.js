@@ -18,7 +18,6 @@
 var UI = (function () {
     "use strict";
 
-    var hiddenColumns = [];
     var dataTable;
 
     /******************************************************************/
@@ -33,14 +32,15 @@ var UI = (function () {
             {'title': 'Provider'},
             {'title': 'Service'},
             {'title': 'Conditions'},
-            {'title': 'Expiration time'}
+            {'title': 'Expiration time'},
+            {'title': 'Status'}
         ];
 
         dataTable = $('#agreements_table').dataTable({
             'columns': columns,
             "columnDefs": [
                 {
-                    "targets": hiddenColumns,
+                    "targets": [6],
                     "visible": false
                 }
             ],
@@ -48,7 +48,7 @@ var UI = (function () {
             'binfo': false,
             'pagingType': 'full_numbers',
             'info': false,
-            'order': [],
+            // 'order': [],
             "language": {
                 "paginate": {
                     "first": '<i class="fa fa-fast-backward"></i>',
@@ -107,39 +107,89 @@ var UI = (function () {
             .insertBefore(nextElement);
     }
 
-    function buildTableBody (data) {
+    function createStatusButton (nextElement) {
 
-        var row;
+        var container = $('<div>')
+            .addClass('button-group dropup')
+            .insertBefore(nextElement);
 
-        // Clear previous elements
-        dataTable.api().clear();
+        $('<button>')
+            .html('<i class="fa fa-list-ul"></i>')
+            .addClass('btn btn-default pull-left action-button')
+            .attr('data-toggle', 'dropdown')
+            .attr('id', 'statusButton')
+            .attr('aria-haspopup', 'true')
+            .attr('aria-expanded', 'false')
+            .click(function () {
+                $('#status-selector').addClass('slideUp');
+            })
+            .appendTo(container);
+
+        $('<ul>')
+            .addClass('dropdown-menu')
+            .attr('aria-labelledby', 'statusButton')
+            .html('<li><a class="small" data-value="all" tabIndex="-1">' +
+                    '<input name="statusRadio" checked value="" type="radio"/>&nbsp;All</a></li>' +
+                 '<li><a class="small" data-value="fulfilled" tabIndex="-1">' +
+                    '<input name="statusRadio" value="FULFILLED" type="radio"/>&nbsp;Fulfilled</a></li>' +
+                 '<li><a class="small" data-value="violated" tabIndex="-1">' +
+                    '<input name="statusRadio" value="VIOLATED" type="radio"/>&nbsp;Violated</a></li>' +
+                 '<li><a class="small" data-value="non-determined" tabIndex="-1">' +
+                    '<input name="statusRadio" value="NON_DETERMINED" type="radio"/>&nbsp;Non Determined</a></li>'
+            )
+            .appendTo(container);
+    }
+
+    function setStatusDropdownEvents () {
+        var options = [];
+
+        $( '.dropdown-menu a' ).on( 'click', function( e ) {
+            
+            var input = $('input', this);
+            
+            input.prop('checked', true);
+            dataTable.api().columns(6).search(input.val()).draw();
+            
+            return false;
+        });
+    }
+
+    function buildTableBody (data, getStatus) {
+
+        var nRows = data.length;
+        var rows = [];
 
         data.forEach(function (agreement) {
 
-            row = dataTable.api().row.add([
-                agreement.name,
-                agreement.context.agreementInitiator,
-                agreement.context.agreementResponder,
-                agreement.context.service,
-                Utils.getDisplayableConditions(agreement.terms.allTerms.guaranteeTerms),
-                Utils.formatDate(agreement.context.expirationTime)
-            ])
-            .draw()
-            .nodes()
-            .to$();
+            getStatus(agreement.agreementId, function (response) {
 
-            if (UI.selectedRowId && agreement.id === UI.selectedRowId) {
-                row.addClass('selected');
-            }
+                var status = JSON.parse(response.responseText);
+
+                rows.push([
+                    agreement.name,
+                    agreement.context.agreementInitiator,
+                    agreement.context.agreementResponder,
+                    agreement.context.service,
+                    Utils.getDisplayableConditions(agreement.terms.allTerms.guaranteeTerms, status.guaranteeterms),
+                    Utils.formatDate(agreement.context.expirationTime),
+                    status.guaranteestatus
+                ]);
+
+                if (rows.length === nRows) {
+
+                    // Clear previous elements
+                    dataTable.api().clear();
+
+                    dataTable.api().rows.add(rows).draw();
+                }
+
+            });
         });
     }
 
     function initFixedHeader () {
-
         UI.fixedHeader = new $.fn.dataTable.FixedHeader(dataTable);
-
         $(window).resize(redrawFixedHeaders);
-        
     }
 
     function redrawFixedHeaders () {
@@ -173,13 +223,13 @@ var UI = (function () {
         
     }
 
-    function displayData (refreshCallback, autoRefresh, data) {
+    function displayData (getStatus, refreshCallback, autoRefresh, data) {
 
         // Save previous scroll and page
         var scroll = $(window).scrollTop();
         var page = dataTable.api().page();
 
-        buildTableBody(data);
+        buildTableBody(data, getStatus);
 
         // Restore previous scroll and page
         $(window).scrollTop(scroll);
