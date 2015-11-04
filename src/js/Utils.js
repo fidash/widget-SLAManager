@@ -116,7 +116,10 @@ var Utils = (function() {
     }
 
     function formatDate (dateString) {
+
+        // Remove extra "CET" that makes the date string invalid
         dateString = dateString.replace("CET", "");
+        
         var date = new Date(dateString);
         return date.toUTCString();
     }

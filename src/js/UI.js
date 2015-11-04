@@ -209,12 +209,16 @@ var UI = (function () {
         // Extra padding to adjust to bottom fixed navbar
         $('#agreements_table_wrapper').attr('style', 'padding-bottom: 40px;');
 
-        // Pagination style
-        $('#agreements_table_paginate').addClass('pagination pull-right');
+        var paginationElement = $('#agreements_table_paginate');
 
-        createModalButton($('#agreements_table_paginate'));
-        createSearchField($('#agreements_table_paginate'));
-        createRefreshButton($('#agreements_table_paginate'), refreshCallback);
+        // Pagination style
+        paginationElement.addClass('pagination pull-right');
+
+        createModalButton(paginationElement);
+        createSearchField(paginationElement);
+        createRefreshButton(paginationElement, refreshCallback);
+        createStatusButton(paginationElement);
+        setStatusDropdownEvents();
 
         // Set modal create agreement button click
         $('#create-agreement').on('click', createCallback);
