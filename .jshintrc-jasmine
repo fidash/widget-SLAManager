@@ -10,14 +10,19 @@
     "prototypejs": false,
     "globalstrict": false,
     "strict": true,
+    "validthis": true,
     "white": false,
     "quotmark": false,
     "globals": {
         "URL": false,
         "MashupPlatform": true,
         "Widget": true,
+        "MockMP": true,
+        "beforeAll": true,
+        "afterAll": true,
         "MyStrategy": true,
         "MockServer": true,
-        "MockSocket": true
+        "MockSocket": true,
+        "$": true
     }
 }
