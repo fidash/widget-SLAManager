@@ -124,9 +124,19 @@ var Utils = (function () {
         return date.toUTCString();
     }
 
+    function isEmpty(obj) {
+
+        for (var prop in obj) {
+            return false;
+        }
+
+        return true;
+    }
+
     return {
         createAlert: createAlert,
         getDisplayableConditions: getDisplayableConditions,
-        formatDate: formatDate
+        formatDate: formatDate,
+        isEmpty: isEmpty
     };
 })();

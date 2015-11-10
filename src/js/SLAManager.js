@@ -33,6 +33,9 @@ var SLAManager = (function () {
 
     var SLAManager = function SLAManager() {
         this.init = init;
+        this.getAgreements = getAgreements;
+        this.getAgreementStatus = getAgreementStatus;
+        this.createAgreement = createAgreement;
     };
 
 
@@ -64,38 +67,14 @@ var SLAManager = (function () {
 
     function onError (error) {
 
-        if (error.message in ERRORS) {
-            Utils.createAlert('danger', 'Error', ERRORS[error.message], error);
-        }
-        else {
-            Utils.createAlert('danger', error.message, error.body);
-        }
+        // Default values are assigned if the error doesn't have the field
+        var title = error.message ? error.message : "Error";
+        var body = error.message in ERRORS ? ERRORS[error.message] : (error.body ? error.body : "An error has occurred.");
+        var details = Utils.isEmpty(error) ? null : error;
+
+        Utils.createAlert('danger', title, body, details);
 
         console.log('Error: ' + JSON.stringify(error));
-    }
-
-    function getAgreements(autoRefresh) {
-
-        makeRequest(BASE_URL + "/agreements", "GET",
-            function (response) {
-                UI.displayData(getAgreementStatus, getAgreements, autoRefresh, JSON.parse(response.responseText));
-            }, onError);
-    }
-
-    function getAgreementStatus (id, success) {
-        makeRequest(BASE_URL + "/agreements/" + id + "/guaranteestatus", "GET", success, onError);
-    }
-
-    function createAgreement () {
-        var form = $('#create_agreement_form');
-        var fields = readFormFields(form);
-        console.dir(fields);
-
-        //TODO: End create POST
-        makeRequest(BASE_URL + '/agreements', 'POST',
-            function () {
-                getAgreements();
-            }, onError, fields);
     }
 
     function readFormFields (form) {
@@ -119,6 +98,26 @@ var SLAManager = (function () {
     function init () {
         UI.createTable(getAgreements, createAgreement);
         getAgreements(true);
+    }
+
+    function getAgreements(autoRefresh) {
+
+        makeRequest(BASE_URL + "/agreements", "GET",
+            function (response) {
+                UI.displayData(getAgreementStatus, getAgreements, autoRefresh, JSON.parse(response.responseText));
+            }, onError);
+    }
+
+    function getAgreementStatus (id, success) {
+        makeRequest(BASE_URL + "/agreements/" + id + "/guaranteestatus", "GET", success, onError);
+    }
+
+    function createAgreement () {
+
+        var form = $('#create_agreement_form');
+        var fields = readFormFields(form);
+
+        makeRequest(BASE_URL + '/agreements', 'POST', getAgreements.bind(null, false), onError, fields);
     }
 
     return SLAManager;
