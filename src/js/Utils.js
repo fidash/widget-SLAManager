@@ -33,6 +33,9 @@ var Utils = (function () {
 
         var formattedCondition = JSON.parse(rawCondition).constraint;
 
+        // Check for null status
+        status = status ? status : "";
+
         for (var comparator in COMPARATORS) {
             formattedCondition = formattedCondition.replace(comparator, COMPARATORS[comparator]);
         }
@@ -119,6 +122,9 @@ var Utils = (function () {
 
         // Remove extra "CET" that makes the date string invalid
         dateString = dateString.replace("CET", "");
+
+        // Add Z at the end of the date to indicate UTC time
+        dateString += "Z";
 
         var date = new Date(dateString);
         return date.toUTCString();

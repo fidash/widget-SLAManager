@@ -20,6 +20,7 @@
         "MockMP": true,
         "beforeAll": true,
         "afterAll": true,
+        "getJSONFixture": true,
         "MyStrategy": true,
         "MockServer": true,
         "MockSocket": true,
