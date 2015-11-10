@@ -5,13 +5,25 @@ describe("SLAManager module", function () {
 
     var slaManager;
     var BASE_URL;
+    var originalUtils;
+    var originalUI;
 
     beforeAll(function () {
+
+        // Save originals
+        originalUI = window.UI;
+        originalUtils = window.Utils;
+
         window.MashupPlatform = new MockMP.MockMP();
         window.UI = jasmine.createSpyObj("UI", ["createTable", "displayData", "clearTable"]);
         window.Utils = jasmine.createSpyObj("Utils", ["createAlert", "getDisplayableConditions", "formatDate", "isEmpty"]);
         BASE_URL = "http://private-anon-c19d8c469-slamanagercore.apiary-mock.com";
         // BASE_URL = "http://130.206.113.159/sla-service";
+    });
+
+    afterAll(function () {
+        window.UI = originalUI;
+        window.Utils = originalUtils;
     });
 
     beforeEach(function () {
