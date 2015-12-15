@@ -25,7 +25,7 @@ var SLAManager = (function () {
         '422 Error': 'You are not authenticated in the wirecloud platform.'
     };
     //var BASE_URL = "http://130.206.113.159/sla-service";
-    var BASE_URL = "http://private-anon-c19d8c469-slamanagercore.apiary-mock.com";
+    var BASE_URL = "http://private-anon-a77c63165-slamanagercore.apiary-mock.com";
 
     /******************************************************************/
     /*                      C O N S T R U C T O R                     */
