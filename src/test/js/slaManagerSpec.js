@@ -10,14 +10,14 @@ describe("SLAManager module", function () {
 
     beforeAll(function () {
 
-        // Save originals
+        // Save original references to the modules
         originalUI = window.UI;
         originalUtils = window.Utils;
 
         window.MashupPlatform = new MockMP.MockMP();
         window.UI = jasmine.createSpyObj("UI", ["createTable", "displayData", "clearTable"]);
         window.Utils = jasmine.createSpyObj("Utils", ["createAlert", "getDisplayableConditions", "formatDate", "isEmpty"]);
-        BASE_URL = "http://private-anon-c19d8c469-slamanagercore.apiary-mock.com";
+        BASE_URL = "http://private-anon-a77c63165-slamanagercore.apiary-mock.com";
         // BASE_URL = "http://130.206.113.159/sla-service";
     });
 
@@ -70,7 +70,7 @@ describe("SLAManager module", function () {
     });
 
     it("should handle errors when getting a list of agreements", function () {
-        
+
         var autoRefresh = true;
         var error = {
             body: "body",
@@ -127,7 +127,7 @@ describe("SLAManager module", function () {
     });
 
     it("should create an agreement", function () {
-        
+
         slaManager.createAgreement();
 
         expect(MashupPlatform.http.makeRequest).toHaveBeenCalledWith(BASE_URL + "/agreements", jasmine.any(Object));
@@ -223,7 +223,7 @@ describe("SLAManager module", function () {
     });
 
     it("should handle recognized errors", function () {
-        
+
         var autoRefresh = true;
         var error = {
             body: "body",
@@ -240,7 +240,7 @@ describe("SLAManager module", function () {
     });
 
     it ("should handle unrecognized errors", function () {
-        
+
         var autoRefresh = true;
         var error = {
             body: "body",
@@ -273,7 +273,7 @@ describe("SLAManager module", function () {
     });
 
     it ("should handle an error with a recognized message, but without a body", function () {
-        
+
         var autoRefresh = true;
         var error = {
             message: "500 Error"
@@ -289,7 +289,7 @@ describe("SLAManager module", function () {
     });
 
     it ("should handle an error with an unrecognized message but without a body", function () {
-        
+
         var autoRefresh = true;
         var error = {
             message: "message"
@@ -305,7 +305,7 @@ describe("SLAManager module", function () {
     });
 
     it ("should handle an empty error", function () {
-        
+
         var autoRefresh = true;
         var error = {};
         Utils.isEmpty.and.returnValue(true);
