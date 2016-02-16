@@ -48,7 +48,7 @@ module.exports = function (grunt) {
         compress: {
             widget: {
                 options: {
-                  archive: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %><%= isDev %>.wgt',
+                  archive: 'dist/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %><%= isDev %>.wgt',
                   mode: 'zip',
                   level: 9,
                   pretty: true
@@ -60,7 +60,7 @@ module.exports = function (grunt) {
         },
         clean: {
             build: {
-                src: ['build']
+                src: ['build', 'dist']
             },
             temp: {
                 src: ['build/src']
