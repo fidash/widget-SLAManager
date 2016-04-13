@@ -60,7 +60,7 @@ module.exports = function (grunt) {
         },
         clean: {
             build: {
-                src: ['build']
+                src: ['build', 'dist']
             },
             temp: {
                 src: ['build/src']
@@ -133,6 +133,12 @@ module.exports = function (grunt) {
           }
         },
 
+        wirecloud: {
+          publish: {
+            file: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt'
+          }
+        }
+
     });
 
     grunt.loadNpmTasks('grunt-contrib-compress');
@@ -144,6 +150,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-strip-code');
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-wirecloud');
 
     grunt.registerTask('test', [
         'jshint:grunt',

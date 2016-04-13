@@ -1,0 +1,18 @@
+{
+    "AgreementId":"87726a36-e570-4482-b3cc-1cb3d8998bb8",
+    "guaranteestatus":"VIOLATED",
+    "guaranteeterms":[
+        {
+            "name":"percCPULoad",
+            "status":"VIOLATED"
+        },
+        {
+            "name":"percDiskUsed",
+            "status":"FULFILLED"
+        },
+        {
+            "name":"percRAMUsed",
+            "status":"FULFILLED"
+        }
+    ]
+}

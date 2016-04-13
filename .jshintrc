@@ -10,6 +10,7 @@
     "prototypejs": false,
     "globalstrict": false,
     "strict": true,
+    "validthis": true,
     "white": false,
     "quotmark": false,
     "globals": {

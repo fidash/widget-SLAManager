@@ -5,6 +5,6 @@
     "use strict";
 
     var slaManager = new SLAManager();
-    window.addEventListener("DOMContentLoaded", slaManager.init.bind(slaManager), false);
+    window.addEventListener("DOMContentLoaded", slaManager.init, false);
 
 })();

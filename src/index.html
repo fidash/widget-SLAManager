@@ -12,23 +12,18 @@
         <link rel="stylesheet" type="text/css" href="lib/css/dataTables.fixedHeader.css">
         <link rel="stylesheet" type="text/css" href="lib/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
-
-        <!-- JS -->
-        <script type="text/javascript" src="js/UI.js"></script>
-        <script type="text/javascript" src="js/SLAManager.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-        <script src="lib/js/jquery.min.js"></script>
-        <script src="lib/js/jquery.dataTables.min.js"></script>
-        <script src="lib/js/dataTables.fixedHeader.js"></script>
-        <script src="lib/js/bootstrap.min.js"></script>
     </head>
     <body>
-            <!-- Loading animation -->
+
+        <table id="agreements_table" class="display" cellpadding="0" border="0" cellspacing="0" width="100%"></table>
+
+        <!-- Loading animation -->
         <div class="loading hide">
           <i class="fa fa-spinner fa-pulse"></i>
         </div>
+
+        <!-- Create agreement modal -->
         <div id="container">
-            <table id="agreements_table" class="display" cellpadding="0" border="0" cellspacing="0" width="100%"></table>
             <div id="createAgreementModal" class="modal fade" style="top: 0px; display: none;" aria-hidden="false">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -62,5 +57,17 @@
                 </div>
             </div>
         </div>
+
+
+
+        <!-- JS -->
+        <script src="lib/js/jquery.min.js"></script>
+        <script src="lib/js/jquery.dataTables.min.js"></script>
+        <script src="lib/js/dataTables.fixedHeader.js"></script>
+        <script src="lib/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/Utils.js"></script>
+        <script type="text/javascript" src="js/UI.js"></script>
+        <script type="text/javascript" src="js/SLAManager.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
     </body>
 </html>
