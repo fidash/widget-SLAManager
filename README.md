@@ -1,7 +1,8 @@
 SLA Manager Widget
 ==================
 
-[![GitHub license](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://raw.githubusercontent.com/fidash/widget-SLAManager/master/LICENSE.txt)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/fidash/widget-SLAManager/master/LICENSE)
+[![Support badge](https://img.shields.io/badge/support-askbot-yellowgreen.svg)](http://ask.fiware.org)
 [![Build Status](https://build.conwet.fi.upm.es/jenkins/view/FI-Dash/job/Widget%20SLAManager/badge/icon)](https://build.conwet.fi.upm.es/jenkins/view/FI-Dash/job/Widget%20SLAManager/)
 
 Build
